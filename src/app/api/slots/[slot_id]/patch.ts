@@ -1,13 +1,13 @@
 import { db } from "@/db";
 import { slots } from "@/db/schema/slots";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export const PATCH = async (
   request: NextRequest,
-  { params }: { params: Promise<{ coach_id: string; slot_id: string }> }
+  { params }: { params: Promise<{ slot_id: string }> }
 ) => {
-  const { coach_id, slot_id } = await params;
+  const { slot_id } = await params;
   const { start_date, end_date, booked } = await request.json();
 
   const entry = await db
@@ -17,7 +17,7 @@ export const PATCH = async (
       ...(end_date && { end_date }),
       ...(booked && { booked }),
     })
-    .where(and(eq(slots.coach_id, coach_id), eq(slots.id, slot_id)))
+    .where(eq(slots.id, slot_id))
     .returning();
 
   return Response.json(entry[0]);

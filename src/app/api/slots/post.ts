@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   const { userId } = await getSession();
-  const { start_date, end_date } = await request.json();
+  const { start_date, end_date, coach_id: _coach_id } = await request.json();
 
   const entry = await db
     .insert(slots)
