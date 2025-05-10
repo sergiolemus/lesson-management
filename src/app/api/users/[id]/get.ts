@@ -1,3 +1,4 @@
+import { getSession } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema/users";
 import { eq } from "drizzle-orm";
@@ -8,7 +9,9 @@ export const GET = async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   const { id } = await params;
-  const results = await db.select().from(users).where(eq(users.id, id));
+  const { userId } = await getSession();
+
+  const results = await db.select().from(users).where(eq(users.id, userId));
 
   return Response.json(results);
 };
