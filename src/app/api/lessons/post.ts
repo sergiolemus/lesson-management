@@ -3,18 +3,22 @@ import { db } from "@/db";
 import { lessons } from "@/db/schema/lessons";
 import { NextRequest } from "next/server";
 
-export const POST = async (
-  request: NextRequest,
-  { params }: { params: Promise<{ coach_id: string; slot_id: string }> }
-) => {
-  const { coach_id, slot_id } = await params;
+export const POST = async (request: NextRequest) => {
   const { userId } = await getSession();
+
+  const {
+    coach_id,
+    slot_id,
+    student_id: _student_id,
+    complete,
+  } = await request.json();
+
   const { origin } = request.nextUrl;
   const { headers } = request;
 
   const body = JSON.stringify({ booked: 1 });
 
-  const slot = await fetch(`${origin}/api/slots/${coach_id}/${slot_id}`, {
+  const slot = await fetch(`${origin}/api/slots/${slot_id}`, {
     method: "PATCH",
     body,
     headers: {
@@ -31,6 +35,7 @@ export const POST = async (
       coach_id,
       student_id: userId,
       complete: 0,
+      ...(complete && { complete }),
     })
     .returning();
 
