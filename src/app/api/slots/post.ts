@@ -4,7 +4,12 @@ import { slots } from "@/db/schema/slots";
 import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  const { userId } = await getSession();
+  const { userId, role } = await getSession();
+
+  if (role === "student") {
+    return Response.json({}, { status: 401 });
+  }
+
   const { start_date, end_date, coach_id: _coach_id } = await request.json();
 
   const entry = await db

@@ -8,6 +8,10 @@ export const GET = async () => {
 
   const filters: SQL[] = [];
 
+  if (role === "student") {
+    return Response.json([], { status: 401 });
+  }
+
   if (role === "coach") {
     filters.push(eq(feedback.coach_id, userId));
   }

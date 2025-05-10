@@ -4,7 +4,11 @@ import { feedback } from "@/db/schema/feedback";
 import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  const { userId } = await getSession();
+  const { userId, role } = await getSession();
+
+  if (role === "student") {
+    return Response.json({}, { status: 401 });
+  }
 
   const {
     lesson_id,
