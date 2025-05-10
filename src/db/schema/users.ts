@@ -4,10 +4,10 @@ export const users = sqliteTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").unique(),
-  role: text("role"),
-  phone_number: text("phone_number"),
+  name: text("name").notNull(),
+  email: text("email").unique().notNull(),
+  role: text("role").notNull(),
+  phone_number: text("phone_number").notNull(),
 });
 
 export type InsertUser = typeof users.$inferInsert;
