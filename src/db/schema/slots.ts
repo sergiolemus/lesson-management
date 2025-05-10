@@ -10,6 +10,7 @@ export const slots = sqliteTable("slot", {
     .notNull(),
   start_date: int("start_date").notNull(),
   end_date: int("end_date").notNull(),
+  booked: int("booked").default(0),
 });
 
 export type InsertSlots = typeof slots.$inferInsert;
