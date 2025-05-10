@@ -8,7 +8,7 @@ export const GET = async (
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
-  const { id } = await params;
+  const { id: _id } = await params;
   const { userId } = await getSession();
 
   const results = await db.select().from(users).where(eq(users.id, userId));
