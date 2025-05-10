@@ -5,7 +5,7 @@ export const slots = sqliteTable("slot", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  user_id: text("user_id")
+  coach_id: text("coach_id")
     .references(() => users.id)
     .notNull(),
   start_date: int("start_date").notNull(),
