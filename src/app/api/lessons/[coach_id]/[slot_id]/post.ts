@@ -14,7 +14,7 @@ export const POST = async (
 
   const body = JSON.stringify({ booked: 1 });
 
-  await fetch(`${origin}/api/slots/${coach_id}/${slot_id}`, {
+  const slot = await fetch(`${origin}/api/slots/${coach_id}/${slot_id}`, {
     method: "PATCH",
     body,
     headers: {
@@ -34,5 +34,5 @@ export const POST = async (
     })
     .returning();
 
-  return Response.json(entry[0]);
+  return Response.json({ lesson: entry[0], slot: await slot.json() });
 };
