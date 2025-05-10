@@ -5,9 +5,9 @@ import { NextRequest } from "next/server";
 
 export const PATCH = async (
   request: NextRequest,
-  { params }: { params: Promise<{ slot_id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
-  const { slot_id } = await params;
+  const { id } = await params;
   const { start_date, end_date, booked } = await request.json();
 
   const entry = await db
@@ -17,7 +17,7 @@ export const PATCH = async (
       ...(end_date && { end_date }),
       ...(booked && { booked }),
     })
-    .where(eq(slots.id, slot_id))
+    .where(eq(slots.id, id))
     .returning();
 
   return Response.json(entry[0]);
