@@ -4,7 +4,11 @@ import { lessons } from "@/db/schema/lessons";
 import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  const { userId } = await getSession();
+  const { userId, role } = await getSession();
+
+  if (role === "coach") {
+    return Response.json({}, { status: 401 });
+  }
 
   const {
     coach_id,

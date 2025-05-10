@@ -1,3 +1,4 @@
+import { getSession } from "@/auth";
 import { db } from "@/db";
 import { slots } from "@/db/schema/slots";
 import { eq } from "drizzle-orm";
@@ -7,6 +8,12 @@ export const PATCH = async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
+  const { role } = await getSession();
+
+  if (role === "coach") {
+    return Response.json({}, { status: 401 });
+  }
+
   const { id } = await params;
   const { start_date, end_date, booked } = await request.json();
 
