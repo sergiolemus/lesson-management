@@ -2,6 +2,7 @@ import { getSession } from "@/auth";
 import { db } from "@/db";
 import { lessons } from "@/db/schema/lessons";
 import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 
 export const POST = async (request: NextRequest) => {
   const { userId, role } = await getSession();
@@ -29,6 +30,7 @@ export const POST = async (request: NextRequest) => {
       ...headers,
       "content-type": "application/json",
       "content-length": String(body.length),
+      cookie: (await cookies()).toString(),
     },
   });
 
