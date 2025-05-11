@@ -14,20 +14,22 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const [role, setRole] = useState("coach");
   const [users, setUsers] = useState([]);
   const [id, setId] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
 
-    console.log({
-      role: data.get("role"),
-      id: data.get("id"),
-    });
+    const role = String(data.get("role"));
+    const userId = String(data.get("id"));
+
+    Cookies.set("token", JSON.stringify({ userId, role }), { path: "/" });
   };
 
   const handleRoleChange = (event: SelectChangeEvent) => {
@@ -104,7 +106,12 @@ export default function Home() {
                   ))}
                 </Select>
               </FormControl>
-              <Button type="submit" fullWidth variant="contained">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={id === ""}
+              >
                 Sign in
               </Button>
             </Box>
