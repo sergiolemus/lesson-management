@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Alert, Box, Button, Modal, Snackbar, Typography } from "@mui/material";
 import { Coach } from "@/lib/types/Coach";
 
 export const Slot: React.FC<{
@@ -12,8 +12,11 @@ export const Slot: React.FC<{
   coach: Coach;
 }> = ({ id, startDate, booked, coach }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
+  const handleCloseSnackBar = () => setOpenSnackBar(false);
 
   const date = dayjs.unix(startDate);
   const past = date.isBefore(dayjs());
@@ -42,6 +45,9 @@ export const Slot: React.FC<{
         "content-length": String(body.length),
       },
     });
+
+    setOpenModal(false);
+    setOpenSnackBar(true);
   };
 
   return (
@@ -111,6 +117,20 @@ export const Slot: React.FC<{
           </Box>
         </Box>
       </Modal>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackBar}
+      >
+        <Alert
+          onClose={handleCloseSnackBar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Lesson Booked!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
