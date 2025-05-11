@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Container, Card, CardContent } from "@mui/material";
 import dayjs from "dayjs";
-import { getWeek } from "../lib";
+import { getWeek } from "@/lib";
 
 export default function Calendar() {
   const [slots, setSlots] = useState([]);
