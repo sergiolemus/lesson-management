@@ -9,14 +9,24 @@ import {
   CardContent,
   Grid,
   Button,
+  Popover,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
 import { getUser } from "@/auth/getUser";
 import { Slot } from "./_types/Slot";
 import { Schedule } from "./_types/Schedule";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Calendar() {
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const open = Boolean(anchorEl);
+  const id = open ? "date-popover" : undefined;
+
   const [schedule, setSchedule] = useState<Schedule>({
     0: [],
     1: [],
@@ -30,9 +40,8 @@ export default function Calendar() {
   useEffect(() => {
     (async () => {
       const { userId } = getUser();
-      const today = dayjs();
 
-      const { startDate, endDate } = getWeek(today);
+      const { startDate, endDate } = getWeek(currentDate);
 
       const start_date = startDate.unix();
       const end_date = endDate.unix();
@@ -43,16 +52,19 @@ export default function Calendar() {
 
       const slots: Slot[] = await res.json();
 
-      const scheduleWithSlots = slots.reduce<Schedule>((schedule, slot) => {
-        const { start_date } = slot;
-        const day = dayjs.unix(start_date).day();
+      const scheduleWithSlots = slots.reduce<Schedule>(
+        (schedule, slot) => {
+          const { start_date } = slot;
+          const day = dayjs.unix(start_date).day();
 
-        return { ...schedule, [day]: [slot, ...schedule[day]] };
-      }, schedule);
+          return { ...schedule, [day]: [slot, ...schedule[day]] };
+        },
+        { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] }
+      );
 
       setSchedule(scheduleWithSlots);
     })();
-  }, []);
+  }, [currentDate]);
 
   return (
     <Container maxWidth="lg">
@@ -76,10 +88,57 @@ export default function Calendar() {
                 mb: 2,
               }}
             >
-              <Typography component="h2" variant="h5">
-                Schedule
-              </Typography>
-              <Button>TEST</Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography component="h2" variant="h5">
+                  Schedule
+                </Typography>
+              </Box>
+              <Button
+                variant="contained"
+                onClick={(event) => setAnchorEl(event.currentTarget)}
+                startIcon={<EditCalendarIcon />}
+              >
+                Edit
+              </Button>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <DateCalendar
+                      sx={{ height: "290px" }}
+                      value={currentDate}
+                      onChange={(newValue) => setCurrentDate(dayjs(newValue))}
+                    />
+                    <Button variant="contained" sx={{ m: 2 }}>
+                      Submit
+                    </Button>
+                  </Box>
+                </LocalizationProvider>
+              </Popover>
             </Box>
             <Grid container columns={7}>
               {Object.entries(schedule).map(([day, slots]) => (
@@ -108,14 +167,14 @@ export default function Calendar() {
                           variant="h6"
                           textAlign="center"
                         >
-                          {dayjs().day(Number(day)).format("ddd")}
+                          {currentDate.day(Number(day)).format("ddd")}
                         </Typography>
                         <Typography
                           component="h2"
                           variant="h6"
                           textAlign="center"
                         >
-                          {dayjs()
+                          {currentDate
                             .startOf("w")
                             .add(Number(day), "d")
                             .format("DD")}
