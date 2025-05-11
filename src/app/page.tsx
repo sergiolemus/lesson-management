@@ -15,11 +15,14 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [role, setRole] = useState("coach");
   const [users, setUsers] = useState([]);
   const [id, setId] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,6 +33,10 @@ export default function Home() {
     const userId = String(data.get("id"));
 
     Cookies.set("token", JSON.stringify({ userId, role }), { path: "/" });
+
+    if (role === "coach") {
+      router.push("/calendar");
+    }
   };
 
   const handleRoleChange = (event: SelectChangeEvent) => {
