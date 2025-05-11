@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Container, Card, CardContent } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
+import { getUser } from "@/auth/getUser";
 
 export default function Calendar() {
+  const { userId } = getUser();
   const [slots, setSlots] = useState([]);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export default function Calendar() {
       const end_date = endDate.unix();
 
       const res = await fetch(
-        `/api/slots?start_date=${start_date}&end_date=${end_date}`
+        `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${userId}`
       );
 
       const slots = await res.json();
