@@ -13,15 +13,29 @@ import {
   MenuItem,
   Select,
   InputLabel,
+  TextField,
+  Popover,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
 import { Slot, Schedule } from "@/lib/types";
+import {
+  DateCalendar,
+  DatePicker,
+  LocalizationProvider,
+  TimeField,
+} from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 
 export default function Calendar() {
   const [coaches, setCoaches] = useState([]);
   const [coachId, setCoachId] = useState("");
-  const [currentDate, _setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const open = Boolean(anchorEl);
+  const id = open ? "date-popover" : undefined;
 
   const [schedule, setSchedule] = useState<Schedule>({
     0: [],
@@ -32,6 +46,10 @@ export default function Calendar() {
     5: [],
     6: [],
   });
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     (async () => {
@@ -101,17 +119,18 @@ export default function Calendar() {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 2,
                 }}
               >
-                <FormControl>
-                  <InputLabel htmlFor="coach-id">Select</InputLabel>
+                <FormControl sx={{ flexGrow: 1 }}>
+                  <InputLabel htmlFor="coach-id">Coach</InputLabel>
                   <Select
                     id="coach-id"
                     name="coach-id"
                     value={coachId}
-                    label="Select"
+                    label="Coach"
                     onChange={(event) => {
                       setCoachId(event.target.value as string);
                     }}
@@ -123,6 +142,52 @@ export default function Calendar() {
                     ))}
                   </Select>
                 </FormControl>
+                <Button
+                  variant="contained"
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                  startIcon={<EditCalendarIcon />}
+                >
+                  Date
+                </Button>
+                <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Box
+                      component="form"
+                      onSubmit={async (e) => {
+                        handleClose();
+                      }}
+                      noValidate
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <FormControl>
+                        <DateCalendar
+                          sx={{ height: "290px", mb: 1 }}
+                          value={currentDate}
+                          onChange={(newValue) =>
+                            setCurrentDate(dayjs(newValue))
+                          }
+                        />
+                      </FormControl>
+                    </Box>
+                  </LocalizationProvider>
+                </Popover>
               </Box>
             </Box>
             <Grid container columns={7}>
