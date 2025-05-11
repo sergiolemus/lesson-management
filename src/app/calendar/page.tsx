@@ -68,9 +68,19 @@ export default function Calendar() {
       >
         <Card variant="outlined" sx={{ maxWidth: "100%", padding: "16px" }}>
           <CardContent sx={{ width: "100vh" }}>
-            <Typography component="h2" variant="h5" sx={{ mb: 2 }}>
-              Schedule
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                mb: 2,
+              }}
+            >
+              <Typography component="h2" variant="h5">
+                Schedule
+              </Typography>
+              <Button>TEST</Button>
+            </Box>
             <Grid container columns={7}>
               {Object.entries(schedule).map(([day, slots]) => (
                 <Grid key={day} size={1} sx={{ height: "500px" }}>
