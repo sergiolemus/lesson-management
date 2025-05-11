@@ -17,11 +17,16 @@ import { getUser } from "@/auth/getUser";
 import { Slot } from "./_types/Slot";
 import { Schedule } from "./_types/Schedule";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import {
+  DateCalendar,
+  LocalizationProvider,
+  TimeField,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
+  const [selectedTime, setSelectedTime] = useState(currentDate);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const open = Boolean(anchorEl);
@@ -110,7 +115,10 @@ export default function Calendar() {
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
-                onClose={() => setAnchorEl(null)}
+                onClose={() => {
+                  setAnchorEl(null);
+                  setSelectedTime(dayjs());
+                }}
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "right",
@@ -129,9 +137,15 @@ export default function Calendar() {
                     }}
                   >
                     <DateCalendar
-                      sx={{ height: "290px" }}
+                      sx={{ height: "290px", mb: 1 }}
                       value={currentDate}
                       onChange={(newValue) => setCurrentDate(dayjs(newValue))}
+                    />
+                    <TimeField
+                      label="Book Slot"
+                      value={selectedTime}
+                      sx={{ mx: 2 }}
+                      onChange={(newValue) => setSelectedTime(dayjs(newValue))}
                     />
                     <Button variant="contained" sx={{ m: 2 }}>
                       Submit
