@@ -173,6 +173,7 @@ export default function Book() {
                       <FormControl>
                         <DateCalendar
                           sx={{ height: "290px", mb: 1 }}
+                          disablePast
                           value={currentDate}
                           onChange={(newValue) =>
                             setCurrentDate(dayjs(newValue))
@@ -211,7 +212,7 @@ export default function Book() {
                           variant="h6"
                           textAlign="center"
                         >
-                          {currentDate.day(Number(day)).format("ddd")}
+                          {dayjs().day(Number(day)).format("ddd")}
                         </Typography>
                         <Typography
                           component="h2"
@@ -234,12 +235,15 @@ export default function Book() {
                         }}
                       >
                         {slots.map(({ id, start_date, booked }) => {
+                          const past = dayjs.unix(start_date).isBefore(dayjs());
+
                           if (booked) {
                             return (
                               <Button
                                 key={id}
                                 variant="outlined"
                                 color="success"
+                                disabled={past}
                               >
                                 {dayjs
                                   .unix(Number(start_date))
@@ -249,7 +253,7 @@ export default function Book() {
                           }
 
                           return (
-                            <Button key={id} variant="outlined">
+                            <Button key={id} disabled={past} variant="outlined">
                               {dayjs.unix(Number(start_date)).format("hh:mm A")}
                             </Button>
                           );
