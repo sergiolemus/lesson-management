@@ -22,9 +22,10 @@ import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { Slot } from "./_components/Slot";
+import { Coach } from "@/lib/types/Coach";
 
 export default function Book() {
-  const [coaches, setCoaches] = useState([]);
+  const [coaches, setCoaches] = useState<{ [key: string]: Coach }>({});
   const [coachId, setCoachId] = useState("");
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -51,7 +52,15 @@ export default function Book() {
       const res = await fetch(`/api/users?role=coach`, { method: "GET" });
       const coaches = await res.json();
 
-      setCoaches(coaches);
+      const results = coaches.reduce(
+        (results: { [key: string]: Coach }, { id, name }: Coach) => ({
+          ...results,
+          [id]: { id, name },
+        }),
+        {}
+      );
+
+      setCoaches(results);
       setCoachId(coaches[0].id);
     })();
   }, []);
@@ -130,7 +139,7 @@ export default function Book() {
                       setCoachId(event.target.value as string);
                     }}
                   >
-                    {coaches.map(({ id, name }) => (
+                    {Object.values(coaches).map(({ id, name }) => (
                       <MenuItem key={id} value={id}>
                         {name}
                       </MenuItem>
@@ -238,8 +247,10 @@ export default function Book() {
                         {slots.map(({ id, start_date, booked }) => (
                           <Slot
                             id={id}
+                            key={id}
                             startDate={start_date}
                             booked={booked}
+                            coach={coaches[coachId]}
                           />
                         ))}
                       </Box>
