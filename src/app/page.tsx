@@ -37,6 +37,10 @@ export default function Home() {
     if (role === "coach") {
       router.push("/calendar");
     }
+
+    if (role === "student") {
+      router.push("/book");
+    }
   };
 
   const handleRoleChange = (event: SelectChangeEvent) => {
