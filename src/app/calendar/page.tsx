@@ -11,13 +11,11 @@ import {
   Button,
   Popover,
   FormControl,
-  InputLabel,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
 import { getUser } from "@/auth/getUser";
-import { Slot } from "./_types/Slot";
-import { Schedule } from "./_types/Schedule";
+import { Slot, Schedule } from "@/lib/types";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import {
   DateCalendar,
