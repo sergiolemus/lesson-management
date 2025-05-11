@@ -2,40 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Container, Card, CardContent } from "@mui/material";
+import dayjs from "dayjs";
+import { getWeek } from "../lib";
 
-export default function Home() {
-  const [role, setRole] = useState("coach");
-  const [users, setUsers] = useState([]);
-  const [id, setId] = useState("");
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
-    const role = String(data.get("role"));
-    const userId = String(data.get("id"));
-
-    Cookies.set("token", JSON.stringify({ userId, role }), { path: "/" });
-  };
-
-  const handleRoleChange = (event: SelectChangeEvent) => {
-    setRole(event.target.value as string);
-    setId("");
-  };
-
-  const handleUserChange = (event: SelectChangeEvent) => {
-    setId(event.target.value as string);
-  };
+export default function Calendar() {
+  const [slots, setSlots] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/users?role=${role}`, { method: "GET" });
-      const users = await res.json();
+      const today = dayjs();
+      const { startDate, endDate } = getWeek(today);
+
+      const start_date = startDate.unix();
+      const end_date = endDate.unix();
+
+      const res = await fetch(
+        `/api/slots?start_date=${start_date}&end_date=${end_date}`
+      );
+
+      const slots = await res.json();
+
+      setSlots(slots);
 
       setUsers(users);
     })();
-  }, [role]);
+  }, []);
 
   return (
     <Container maxWidth="lg">
