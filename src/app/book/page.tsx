@@ -17,10 +17,11 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
-import { Slot, Schedule } from "@/lib/types";
+import { Slot as TSlot, Schedule } from "@/lib/types";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import { Slot } from "./_components/Slot";
 
 export default function Book() {
   const [coaches, setCoaches] = useState([]);
@@ -68,7 +69,7 @@ export default function Book() {
         `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${coachId}&booked=0`
       );
 
-      const slots: Slot[] = await res.json();
+      const slots: TSlot[] = await res.json();
 
       const scheduleWithSlots = slots.reduce<Schedule>(
         (schedule, slot) => {
@@ -234,30 +235,13 @@ export default function Book() {
                           mx: 1,
                         }}
                       >
-                        {slots.map(({ id, start_date, booked }) => {
-                          const past = dayjs.unix(start_date).isBefore(dayjs());
-
-                          if (booked) {
-                            return (
-                              <Button
-                                key={id}
-                                variant="outlined"
-                                color="success"
-                                disabled={past}
-                              >
-                                {dayjs
-                                  .unix(Number(start_date))
-                                  .format("hh:mm A")}
-                              </Button>
-                            );
-                          }
-
-                          return (
-                            <Button key={id} disabled={past} variant="outlined">
-                              {dayjs.unix(Number(start_date)).format("hh:mm A")}
-                            </Button>
-                          );
-                        })}
+                        {slots.map(({ id, start_date, booked }) => (
+                          <Slot
+                            id={id}
+                            startDate={start_date}
+                            booked={booked}
+                          />
+                        ))}
                       </Box>
                     </CardContent>
                   </Card>
