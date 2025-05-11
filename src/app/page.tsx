@@ -78,12 +78,12 @@ export default function Home() {
               }}
             >
               <FormControl>
-                <InputLabel htmlFor="role">Role</InputLabel>
+                <InputLabel htmlFor="role">Select Role</InputLabel>
                 <Select
                   id="role"
                   name="role"
                   value={role}
-                  label="Role"
+                  label="Select Role"
                   onChange={handleRoleChange}
                 >
                   <MenuItem value={"coach"}>Coach</MenuItem>
@@ -91,12 +91,12 @@ export default function Home() {
                 </Select>
               </FormControl>
               <FormControl>
-                <InputLabel htmlFor="id">User</InputLabel>
+                <InputLabel htmlFor="id">Select User</InputLabel>
                 <Select
                   id="id"
                   name="id"
                   value={id}
-                  label="User"
+                  label="Select User"
                   onChange={handleUserChange}
                 >
                   {users.map(({ id, name }) => (
