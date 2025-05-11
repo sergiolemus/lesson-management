@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   Grid,
+  Button,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -110,14 +111,37 @@ export default function Calendar() {
                             .format("DD")}
                         </Typography>
                       </Box>
-                      {slots.map(({ id, start_date }) => (
-                        <Card
-                          key={id}
-                          sx={{ mx: 1, mb: 1, textAlign: "center" }}
-                        >
-                          {dayjs.unix(Number(start_date)).format("hh:mm A")}
-                        </Card>
-                      ))}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          gap: 1,
+                          mx: 1,
+                        }}
+                      >
+                        {slots.map(({ id, start_date, booked }) => {
+                          if (booked) {
+                            return (
+                              <Button
+                                key={id}
+                                variant="outlined"
+                                color="success"
+                              >
+                                {dayjs
+                                  .unix(Number(start_date))
+                                  .format("hh:mm A")}
+                              </Button>
+                            );
+                          }
+
+                          return (
+                            <Button key={id} variant="outlined">
+                              {dayjs.unix(Number(start_date)).format("hh:mm A")}
+                            </Button>
+                          );
+                        })}
+                      </Box>
                     </CardContent>
                   </Card>
                 </Grid>
