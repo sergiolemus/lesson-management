@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -10,6 +10,8 @@ import {
   Grid,
   Button,
   Popover,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -28,6 +30,7 @@ export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState(currentDate);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [addedSlot, setAddedSlot] = useState("");
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -41,6 +44,39 @@ export default function Calendar() {
     5: [],
     6: [],
   });
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedTime(dayjs());
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const hour = selectedTime.get("h");
+    const minute = selectedTime.get("m");
+
+    const start_date = dayjs(currentDate).set("h", hour).set("m", minute);
+    const end_date = start_date.add(2, "h");
+
+    const body = JSON.stringify({
+      start_date: start_date.unix(),
+      end_date: end_date.unix(),
+    });
+
+    const res = await fetch(`/api/slots`, {
+      method: "POST",
+      body,
+      headers: {
+        "content-type": "application/json",
+        "content-length": String(body.length),
+      },
+    });
+
+    const { id }: Slot = await res.json();
+
+    setAddedSlot(id);
+  };
 
   useEffect(() => {
     (async () => {
@@ -69,7 +105,7 @@ export default function Calendar() {
 
       setSchedule(scheduleWithSlots);
     })();
-  }, [currentDate]);
+  }, [currentDate, addedSlot]);
 
   return (
     <Container maxWidth="lg">
@@ -115,10 +151,7 @@ export default function Calendar() {
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
-                onClose={() => {
-                  setAnchorEl(null);
-                  setSelectedTime(dayjs());
-                }}
+                onClose={handleClose}
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "right",
@@ -130,24 +163,36 @@ export default function Calendar() {
               >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Box
+                    component="form"
+                    onSubmit={async (e) => {
+                      await handleSubmit(e);
+                      handleClose();
+                    }}
+                    noValidate
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
                     }}
                   >
-                    <DateCalendar
-                      sx={{ height: "290px", mb: 1 }}
-                      value={currentDate}
-                      onChange={(newValue) => setCurrentDate(dayjs(newValue))}
-                    />
-                    <TimeField
-                      label="Book Slot"
-                      value={selectedTime}
-                      sx={{ mx: 2 }}
-                      onChange={(newValue) => setSelectedTime(dayjs(newValue))}
-                    />
-                    <Button variant="contained" sx={{ m: 2 }}>
+                    <FormControl>
+                      <DateCalendar
+                        sx={{ height: "290px", mb: 1 }}
+                        value={currentDate}
+                        onChange={(newValue) => setCurrentDate(dayjs(newValue))}
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <TimeField
+                        label="Book Slot"
+                        value={selectedTime}
+                        sx={{ mx: 2 }}
+                        onChange={(newValue) =>
+                          setSelectedTime(dayjs(newValue))
+                        }
+                      />
+                    </FormControl>
+                    <Button type="submit" variant="contained" sx={{ m: 2 }}>
                       Submit
                     </Button>
                   </Box>
