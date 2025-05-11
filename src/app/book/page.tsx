@@ -13,22 +13,16 @@ import {
   MenuItem,
   Select,
   InputLabel,
-  TextField,
   Popover,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
 import { Slot, Schedule } from "@/lib/types";
-import {
-  DateCalendar,
-  DatePicker,
-  LocalizationProvider,
-  TimeField,
-} from "@mui/x-date-pickers";
+import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 
-export default function Calendar() {
+export default function Book() {
   const [coaches, setCoaches] = useState([]);
   const [coachId, setCoachId] = useState("");
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -166,7 +160,7 @@ export default function Calendar() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Box
                       component="form"
-                      onSubmit={async (e) => {
+                      onSubmit={async () => {
                         handleClose();
                       }}
                       noValidate
