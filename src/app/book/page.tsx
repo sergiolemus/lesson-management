@@ -53,7 +53,7 @@ export default function Calendar() {
       const end_date = endDate.unix();
 
       const res = await fetch(
-        `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${coachId}`
+        `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${coachId}&booked=0`
       );
 
       const slots: Slot[] = await res.json();
