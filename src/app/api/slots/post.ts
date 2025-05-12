@@ -18,7 +18,7 @@ export const POST = async (request: NextRequest) => {
       coach_id: userId,
       start_date,
       end_date,
-      booked: 0,
+      status: "free",
     })
     .returning();
 

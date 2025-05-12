@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
   const { origin } = request.nextUrl;
   const { headers } = request;
 
-  const body = JSON.stringify({ booked: 1, student_id: userId });
+  const body = JSON.stringify({ status: "reserved", student_id: userId });
 
   const slot = await fetch(`${origin}/api/slots/${slot_id}`, {
     method: "PATCH",

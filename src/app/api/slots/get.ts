@@ -11,7 +11,7 @@ export const GET = async (request: NextRequest) => {
   const start_date = searchParams.get("start_date");
   const end_date = searchParams.get("end_date");
   const coach_id = searchParams.get("coach_id");
-  const booked = searchParams.get("booked");
+  const status = searchParams.get("status");
 
   const filters: SQL[] = [];
 
@@ -34,8 +34,8 @@ export const GET = async (request: NextRequest) => {
     filters.push(lte(slots.end_date, Number(end_date)));
   }
 
-  if (booked) {
-    filters.push(eq(slots.booked, Number(booked)));
+  if (status) {
+    filters.push(eq(slots.status, String(status)));
   }
 
   const results = await db

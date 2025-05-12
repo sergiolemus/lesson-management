@@ -15,14 +15,14 @@ export const PATCH = async (
   }
 
   const { id } = await params;
-  const { start_date, end_date, booked, student_id } = await request.json();
+  const { start_date, end_date, status, student_id } = await request.json();
 
   const entry = await db
     .update(slots)
     .set({
       ...(start_date && { start_date }),
       ...(end_date && { end_date }),
-      ...(booked && { booked }),
+      ...(status && { status }),
       ...(student_id && { student_id }),
     })
     .where(eq(slots.id, id))

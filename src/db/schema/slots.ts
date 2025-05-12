@@ -11,7 +11,7 @@ export const slots = sqliteTable("slot", {
   student_id: text("student_id").references(() => users.id),
   start_date: int("start_date").notNull(),
   end_date: int("end_date").notNull(),
-  booked: int("booked").default(0),
+  status: text("status").default("free"),
 });
 
 export type InsertSlots = typeof slots.$inferInsert;
