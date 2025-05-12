@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) + [Typescript](https://www.typescriptlang.org/) [Drizzle ORM](https://orm.drizzle.team/) + [Turso](https://turso.tech/) + [MUI](https://mui.com/) project.
 
+<img width="1728" alt="Screenshot 2025-05-12 at 6 17 55 AM" src="https://github.com/user-attachments/assets/207f6487-7114-4d81-b5f5-a5b1af64830c" />
+
 ## Getting Started
 
 First, add respective `ENV` variables:
@@ -60,8 +62,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Screenshots
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 18 04 AM" src="https://github.com/user-attachments/assets/eb3cbc30-5e1b-4c2d-ab59-ccae933e6472" />
-
-<img width="1728" alt="Screenshot 2025-05-12 at 6 17 55 AM" src="https://github.com/user-attachments/assets/207f6487-7114-4d81-b5f5-a5b1af64830c" />
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 18 14 AM" src="https://github.com/user-attachments/assets/a665d56d-4610-448e-a379-8f6e15e84db7" />
 
