@@ -2,7 +2,18 @@
 
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { Box, Button, Modal } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Modal,
+  Rating,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { SlotInfo } from "./SlotInfo";
 import { Student } from "@/lib/types/Student";
 
@@ -21,12 +32,17 @@ export const Slot: React.FC<{
     phone_number: "",
   });
 
+  const [rating, setRating] = useState<number | null>(3);
+  const [ratingError, setRatingError] = useState(false);
+  const [ratingHelperText, setRatingHelperText] = useState("");
+
   const handleOpen = async () => {
     const res = await fetch(`/api/users/${studentId}`, { method: "GET" });
     const student = await res.json();
 
     setStudent(student);
     setOpenModal(true);
+    setRating(3);
   };
 
   const handleClose = () => setOpenModal(false);
@@ -34,8 +50,24 @@ export const Slot: React.FC<{
   const date = dayjs.unix(startDate);
   const past = date.isBefore(dayjs());
 
+  const handleRatingChange = (
+    _event: React.SyntheticEvent,
+    newValue: number | null
+  ) => {
+    setRating(newValue);
+    setRatingError(false);
+    setRatingHelperText("");
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (rating === null) {
+      setRatingError(true);
+      setRatingHelperText("Please provide a rating");
+      return;
+    }
+
     setOpenModal(false);
   };
 
@@ -71,12 +103,46 @@ export const Slot: React.FC<{
             }}
           >
             <SlotInfo
-              title="Feedback"
+              title="Lesson"
               date={date}
               studentName={student.name}
               phoneNumber={student.phone_number}
             />
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Divider sx={{ my: 2 }} />
+            <Typography
+              id="modal-modal-feedback-title"
+              variant="h6"
+              component="h2"
+              sx={{ mb: 1 }}
+            >
+              Feedback
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit}>
+              <FormControl required error={ratingError} sx={{ mb: 1 }}>
+                <FormLabel htmlFor="rating" sx={{ fontSize: "small", mb: 1 }}>
+                  Rating
+                </FormLabel>
+                <Rating
+                  name="rating"
+                  id="rating"
+                  value={rating}
+                  onChange={handleRatingChange}
+                />
+                <FormHelperText sx={{ mx: 0 }}>
+                  {ratingHelperText}
+                </FormHelperText>
+              </FormControl>
+              <FormControl
+                sx={{ display: "flex", flexDirection: "column", mb: 2 }}
+              >
+                <TextField
+                  name="notes"
+                  id="notes"
+                  label="Notes"
+                  multiline
+                  rows={4}
+                />
+              </FormControl>
               <Button type="submit" fullWidth variant="contained">
                 Submit
               </Button>
