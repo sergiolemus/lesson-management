@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import dayjs from "dayjs";
 import { Alert, Box, Button, Modal, Snackbar, Typography } from "@mui/material";
 import { Coach } from "@/lib/types/Coach";
+import { SlotInfo } from "./SlotInfo";
 
 export const Slot: React.FC<{
   id: string;
@@ -22,9 +23,44 @@ export const Slot: React.FC<{
 
   if (booked) {
     return (
-      <Button key={id} variant="outlined" color="success" disabled={past}>
-        {dayjs.unix(Number(startDate)).format("hh:mm A")}
-      </Button>
+      <>
+        <Button
+          key={id}
+          variant="outlined"
+          color="success"
+          disabled={past}
+          onClick={handleOpen}
+        >
+          {dayjs.unix(Number(startDate)).format("hh:mm A")}
+        </Button>
+        <Modal
+          open={openModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <SlotInfo
+              title="Lesson"
+              coachName={coach.name}
+              date={date}
+              phoneNumber={coach.phone_number}
+            />
+          </Box>
+        </Modal>
+      </>
     );
   }
 
@@ -73,42 +109,7 @@ export const Slot: React.FC<{
             p: 4,
           }}
         >
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={{ mb: 2 }}
-          >
-            Booking
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <Box
-              id="modal-modal-coach"
-              sx={{ display: "flex", flexDirection: "row" }}
-            >
-              <Typography fontWeight="bold">Coach:</Typography>
-              &nbsp;
-              <Typography>{coach.name}</Typography>
-            </Box>
-            <Box
-              id="modal-modal-date"
-              sx={{ display: "flex", flexDirection: "row" }}
-            >
-              <Typography fontWeight="bold">Date:</Typography>
-              &nbsp;
-              <Typography>{date.format("LL")}</Typography>
-            </Box>
-            <Box
-              id="modal-modal-time"
-              sx={{ display: "flex", flexDirection: "row" }}
-            >
-              <Typography fontWeight="bold">Time:</Typography>
-              &nbsp;
-              <Typography>{`${date.format("LT")} - ${date
-                .add(2, "h")
-                .format("LT")}`}</Typography>
-            </Box>
-          </Box>
+          <SlotInfo title="Booking" coachName={coach.name} date={date} />
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Button type="submit" fullWidth variant="contained">
               Reserve
