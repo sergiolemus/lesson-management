@@ -39,6 +39,7 @@ export default function Calendar() {
   const [userId, setUserId] = useState(getUser());
   const [submittedFeedbackSlotId, setSubmittedFeedbackSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
   const [userName, setUserName] = useState("");
 
   const router = useRouter();
@@ -66,6 +67,7 @@ export default function Calendar() {
   };
 
   const handleCloseSnackBar = () => setOpenSnackBar(false);
+  const handleCloseErrorSnackBar = () => setOpenErrorSnackBar(false);
 
   const handleFeedbackSubmit = (id: string) => () => {
     setSubmittedFeedbackSlotId(id);
@@ -95,9 +97,16 @@ export default function Calendar() {
       },
     });
 
+    if (res.status === 409) {
+      setOpenErrorSnackBar(true);
+      handleClose();
+      return;
+    }
+
     const { id }: TSlot = await res.json();
 
     setAddedSlot(id);
+    handleClose();
   };
 
   useEffect(() => {
@@ -249,10 +258,7 @@ export default function Calendar() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Box
                     component="form"
-                    onSubmit={async (e) => {
-                      await handleSubmit(e);
-                      handleClose();
-                    }}
+                    onSubmit={handleSubmit}
                     noValidate
                     sx={{
                       display: "flex",
@@ -373,6 +379,20 @@ export default function Calendar() {
           sx={{ width: "100%" }}
         >
           Feedback Submitted!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorSnackBar}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorSnackBar}
+      >
+        <Alert
+          onClose={handleCloseErrorSnackBar}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Entry Creation Failed! Overlapping Entry.
         </Alert>
       </Snackbar>
     </Container>
