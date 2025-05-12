@@ -88,7 +88,7 @@ export const Slot: React.FC<{
   }
 
   return (
-    <Button key={id} disabled={past} variant="outlined" onClick={handleOpen}>
+    <Button key={id} disabled={past} variant="outlined">
       {dayjs.unix(Number(startDate)).format("hh:mm A")}
     </Button>
   );
