@@ -120,7 +120,12 @@ export default function Book() {
           const { start_date } = slot;
           const day = dayjs.unix(start_date).day();
 
-          return { ...schedule, [day]: [slot, ...schedule[day]] };
+          return {
+            ...schedule,
+            [day]: [slot, ...schedule[day]].sort(
+              (a, b) => a.start_date - b.start_date
+            ),
+          };
         },
         { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] }
       );
