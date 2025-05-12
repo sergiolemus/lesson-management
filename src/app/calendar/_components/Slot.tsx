@@ -28,8 +28,8 @@ export const Slot: React.FC<{
   status: string;
   coachId: string;
   studentId: string;
-  onReserve?: () => void;
-}> = ({ id, startDate, status, coachId, studentId }) => {
+  onFeedbackSubmit: () => void;
+}> = ({ id, startDate, status, coachId, studentId, onFeedbackSubmit }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const [student, setStudent] = useState<Student>({
@@ -118,6 +118,7 @@ export const Slot: React.FC<{
     });
 
     setOpenModal(false);
+    onFeedbackSubmit();
   };
 
   if (status === "complete") {

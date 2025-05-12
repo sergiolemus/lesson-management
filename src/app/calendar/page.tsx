@@ -11,6 +11,8 @@ import {
   Button,
   Popover,
   FormControl,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -31,6 +33,8 @@ export default function Calendar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [addedSlot, setAddedSlot] = useState("");
   const [userId, setUserId] = useState(getUser());
+  const [submittedFeedbackSlotId, setSubmittedFeedbackSlotId] = useState("");
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -48,6 +52,13 @@ export default function Calendar() {
   const handleClose = () => {
     setAnchorEl(null);
     setSelectedTime(dayjs());
+  };
+
+  const handleCloseSnackBar = () => setOpenSnackBar(false);
+
+  const handleFeedbackSubmit = (id: string) => () => {
+    setSubmittedFeedbackSlotId(id);
+    setOpenSnackBar(true);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -105,7 +116,7 @@ export default function Calendar() {
       setSchedule(scheduleWithSlots);
       setUserId(userId);
     })();
-  }, [currentDate, addedSlot, userId]);
+  }, [currentDate, addedSlot, userId, submittedFeedbackSlotId]);
 
   return (
     <Container maxWidth="lg">
@@ -263,6 +274,7 @@ export default function Calendar() {
                               status={status}
                               coachId={coach_id}
                               studentId={student_id}
+                              onFeedbackSubmit={handleFeedbackSubmit(id)}
                             />
                           )
                         )}
@@ -275,6 +287,20 @@ export default function Calendar() {
           </CardContent>
         </Card>
       </Box>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackBar}
+      >
+        <Alert
+          onClose={handleCloseSnackBar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Feedback Submitted!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
