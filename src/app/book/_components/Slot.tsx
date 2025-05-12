@@ -5,6 +5,9 @@ import dayjs from "dayjs";
 import { Box, Button, Modal } from "@mui/material";
 import { Coach } from "@/lib/types/Coach";
 import { SlotInfo } from "./SlotInfo";
+import DoneIcon from "@mui/icons-material/Done";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 export const Slot: React.FC<{
   id: string;
@@ -21,15 +24,20 @@ export const Slot: React.FC<{
   const date = dayjs.unix(startDate);
   const past = date.isBefore(dayjs());
 
-  if (status === "reserved") {
+  if (status === "reserved" || status === "complete") {
     return (
       <>
         <Button
           key={id}
           variant="outlined"
-          color="success"
-          disabled={past}
           onClick={handleOpen}
+          sx={{ px: 0 }}
+          color="success"
+          startIcon={<PendingActionsIcon />}
+          {...(status === "complete" && {
+            color: "secondary",
+            startIcon: <DoneIcon />,
+          })}
         >
           {dayjs.unix(Number(startDate)).format("hh:mm A")}
         </Button>
@@ -87,7 +95,14 @@ export const Slot: React.FC<{
 
   return (
     <>
-      <Button key={id} disabled={past} variant="outlined" onClick={handleOpen}>
+      <Button
+        key={id}
+        disabled={past}
+        variant="outlined"
+        onClick={handleOpen}
+        sx={{ px: 0 }}
+        startIcon={<EventAvailableIcon />}
+      >
         {dayjs.unix(Number(startDate)).format("hh:mm A")}
       </Button>
       <Modal
