@@ -75,7 +75,7 @@ export default function Book() {
       const end_date = endDate.unix();
 
       const res = await fetch(
-        `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${coachId}&booked=0`
+        `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${coachId}`
       );
 
       const slots: TSlot[] = await res.json();
