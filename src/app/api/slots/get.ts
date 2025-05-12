@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
 
   if (role === "student") {
     filters.push(
-      //@ts-expect-error
+      //@ts-expect-error fix SQL type error due to or() usage
       or(eq(slots.student_id, String(userId)), isNull(slots.student_id))
     );
   }
