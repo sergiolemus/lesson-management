@@ -32,7 +32,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import FaceIcon from "@mui/icons-material/Face";
 
 export default function Calendar() {
-  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [currentDate, setCurrentDate] = useState(dayjs().minute(0));
   const [selectedTime, setSelectedTime] = useState(currentDate);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [addedSlot, setAddedSlot] = useState("");
@@ -62,7 +62,7 @@ export default function Calendar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setSelectedTime(dayjs());
+    setSelectedTime(dayjs(selectedTime).add(2, "h"));
   };
 
   const handleCloseSnackBar = () => setOpenSnackBar(false);
