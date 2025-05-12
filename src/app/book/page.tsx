@@ -16,6 +16,7 @@ import {
   Popover,
   Snackbar,
   Alert,
+  Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -28,6 +29,7 @@ import { Coach } from "@/lib/types/Coach";
 import { getUser } from "@/auth/getUser";
 import { useRouter } from "next/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
+import FaceIcon from "@mui/icons-material/Face";
 
 export default function Book() {
   const [coaches, setCoaches] = useState<{ [key: string]: Coach }>({});
@@ -165,9 +167,18 @@ export default function Book() {
                     flexGrow: 6,
                   }}
                 >
-                  <Typography component="h2" variant="h5">
-                    {userName}
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 2,
+                    }}
+                  >
+                    <Typography component="h2" variant="h5">
+                      {userName}
+                    </Typography>
+                    <Chip icon={<FaceIcon />} label="Student" />
+                  </Box>
                 </Box>
                 <Box
                   sx={{

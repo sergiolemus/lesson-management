@@ -13,6 +13,7 @@ import {
   FormControl,
   Snackbar,
   Alert,
+  Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -28,6 +29,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Slot } from "./_components/Slot";
 import { useRouter } from "next/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
+import FaceIcon from "@mui/icons-material/Face";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -169,9 +171,18 @@ export default function Calendar() {
                   flexGrow: 6,
                 }}
               >
-                <Typography component="h2" variant="h5">
-                  {userName}
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: 2,
+                  }}
+                >
+                  <Typography component="h2" variant="h5">
+                    {userName}
+                  </Typography>
+                  <Chip icon={<FaceIcon />} label="Coach" />
+                </Box>
               </Box>
               <Box
                 sx={{
