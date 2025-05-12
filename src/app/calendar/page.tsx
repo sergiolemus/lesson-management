@@ -15,7 +15,7 @@ import {
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
 import { getUser } from "@/auth/getUser";
-import { Slot, Schedule } from "@/lib/types";
+import { Slot as TSlot, Schedule } from "@/lib/types";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import {
   DateCalendar,
@@ -23,12 +23,14 @@ import {
   TimeField,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Slot } from "./_components/Slot";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState(currentDate);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [addedSlot, setAddedSlot] = useState("");
+  const [userId, setUserId] = useState(getUser());
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -71,7 +73,7 @@ export default function Calendar() {
       },
     });
 
-    const { id }: Slot = await res.json();
+    const { id }: TSlot = await res.json();
 
     setAddedSlot(id);
   };
@@ -79,7 +81,6 @@ export default function Calendar() {
   useEffect(() => {
     (async () => {
       const { userId } = getUser();
-
       const { startDate, endDate } = getWeek(currentDate);
 
       const start_date = startDate.unix();
@@ -89,7 +90,7 @@ export default function Calendar() {
         `/api/slots?start_date=${start_date}&end_date=${end_date}&coach_id=${userId}`
       );
 
-      const slots: Slot[] = await res.json();
+      const slots: TSlot[] = await res.json();
 
       const scheduleWithSlots = slots.reduce<Schedule>(
         (schedule, slot) => {
@@ -102,8 +103,9 @@ export default function Calendar() {
       );
 
       setSchedule(scheduleWithSlots);
+      setUserId(userId);
     })();
-  }, [currentDate, addedSlot]);
+  }, [currentDate, addedSlot, userId]);
 
   return (
     <Container maxWidth="lg">
@@ -246,27 +248,24 @@ export default function Calendar() {
                           mx: 1,
                         }}
                       >
-                        {slots.map(({ id, start_date, booked }) => {
-                          if (booked) {
-                            return (
-                              <Button
-                                key={id}
-                                variant="outlined"
-                                color="success"
-                              >
-                                {dayjs
-                                  .unix(Number(start_date))
-                                  .format("hh:mm A")}
-                              </Button>
-                            );
-                          }
-
-                          return (
-                            <Button key={id} variant="outlined">
-                              {dayjs.unix(Number(start_date)).format("hh:mm A")}
-                            </Button>
-                          );
-                        })}
+                        {slots.map(
+                          ({
+                            id,
+                            start_date,
+                            booked,
+                            coach_id,
+                            student_id,
+                          }) => (
+                            <Slot
+                              id={id}
+                              key={id}
+                              startDate={start_date}
+                              booked={booked}
+                              coachId={coach_id}
+                              studentId={student_id}
+                            />
+                          )
+                        )}
                       </Box>
                     </CardContent>
                   </Card>
