@@ -27,6 +27,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Slot } from "./_components/Slot";
 import { useRouter } from "next/navigation";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -36,6 +37,7 @@ export default function Calendar() {
   const [userId, setUserId] = useState(getUser());
   const [submittedFeedbackSlotId, setSubmittedFeedbackSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const router = useRouter();
 
@@ -51,6 +53,10 @@ export default function Calendar() {
     5: [],
     6: [],
   });
+
+  const handleLogout = () => {
+    router.push("/");
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -93,9 +99,16 @@ export default function Calendar() {
   };
 
   useEffect(() => {
-    const { role } = getUser();
+    const { role, userId } = getUser();
     if (role === "student") router.push("/");
-  });
+
+    (async () => {
+      const res = await fetch(`/api/users/${userId}`);
+      const user = await res.json();
+
+      setUserName(user.name);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -153,19 +166,56 @@ export default function Calendar() {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
+                  flexGrow: 6,
                 }}
               >
                 <Typography component="h2" variant="h5">
-                  Schedule
+                  {userName}
                 </Typography>
               </Box>
-              <Button
-                variant="contained"
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-                startIcon={<EditCalendarIcon />}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  width: "14.25%",
+                }}
               >
-                Edit
-              </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  fullWidth
+                  onClick={handleLogout}
+                  startIcon={<LogoutIcon />}
+                >
+                  Logout
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                mb: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  flexGrow: 1,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                  startIcon={<EditCalendarIcon />}
+                >
+                  Create Slot
+                </Button>
+              </Box>
               <Popover
                 id={id}
                 open={open}
@@ -212,7 +262,7 @@ export default function Calendar() {
                       />
                     </FormControl>
                     <Button type="submit" variant="contained" sx={{ m: 2 }}>
-                      Submit
+                      Create
                     </Button>
                   </Box>
                 </LocalizationProvider>
