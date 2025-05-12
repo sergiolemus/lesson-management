@@ -53,9 +53,9 @@ export default function Book() {
       const coaches = await res.json();
 
       const results = coaches.reduce(
-        (results: { [key: string]: Coach }, { id, name }: Coach) => ({
+        (results: { [key: string]: Coach }, coach: Coach) => ({
           ...results,
-          [id]: { id, name },
+          [coach.id]: coach,
         }),
         {}
       );
