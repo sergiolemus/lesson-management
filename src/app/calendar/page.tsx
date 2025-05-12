@@ -80,7 +80,11 @@ export default function Calendar() {
     const hour = selectedTime.get("h");
     const minute = selectedTime.get("m");
 
-    const start_date = dayjs(currentDate).set("h", hour).set("m", minute);
+    const start_date = dayjs(currentDate)
+      .set("h", hour)
+      .set("m", minute)
+      .set("s", 0);
+
     const end_date = start_date.add(2, "h");
 
     const body = JSON.stringify({
@@ -270,7 +274,9 @@ export default function Calendar() {
                       <DateCalendar
                         sx={{ height: "290px", mb: 1 }}
                         value={currentDate}
-                        onChange={(newValue) => setCurrentDate(dayjs(newValue))}
+                        onChange={(newValue) =>
+                          setCurrentDate(dayjs(newValue).second(0))
+                        }
                       />
                     </FormControl>
                     <FormControl>
@@ -279,7 +285,7 @@ export default function Calendar() {
                         value={selectedTime}
                         sx={{ mx: 2 }}
                         onChange={(newValue) =>
-                          setSelectedTime(dayjs(newValue))
+                          setSelectedTime(dayjs(newValue).second(0))
                         }
                       />
                     </FormControl>
