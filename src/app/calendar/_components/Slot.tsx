@@ -24,7 +24,7 @@ export const Slot: React.FC<{
   coachId: string;
   studentId: string;
   onReserve?: () => void;
-}> = ({ id, startDate, status, studentId }) => {
+}> = ({ id, startDate, status, coachId, studentId }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const [student, setStudent] = useState<Student>({
@@ -35,6 +35,8 @@ export const Slot: React.FC<{
   const [rating, setRating] = useState<number | null>(3);
   const [ratingError, setRatingError] = useState(false);
   const [ratingHelperText, setRatingHelperText] = useState("");
+
+  const [notes, setNotes] = useState("");
 
   const handleOpen = async () => {
     const res = await fetch(`/api/users/${studentId}`, { method: "GET" });
@@ -59,6 +61,10 @@ export const Slot: React.FC<{
     setRatingHelperText("");
   };
 
+  const handleNotesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNotes(event.target.value);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -67,6 +73,25 @@ export const Slot: React.FC<{
       setRatingHelperText("Please provide a rating");
       return;
     }
+
+    const res = await fetch(`/api/lessons?slot_id=${id}`);
+    const [lesson] = await res.json();
+
+    const body = JSON.stringify({
+      coach_id: coachId,
+      lesson_id: lesson.id,
+      satisfaction_rating: rating,
+      notes,
+    });
+
+    await fetch(`/api/feedback`, {
+      method: "POST",
+      body,
+      headers: {
+        "content-type": "application/json",
+        "content-length": String(body.length),
+      },
+    });
 
     setOpenModal(false);
   };
@@ -140,6 +165,7 @@ export const Slot: React.FC<{
                   id="notes"
                   label="Notes"
                   multiline
+                  onChange={handleNotesChange}
                   rows={4}
                 />
               </FormControl>
