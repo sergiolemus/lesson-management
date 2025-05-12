@@ -16,6 +16,9 @@ import {
 } from "@mui/material";
 import { SlotInfo } from "./SlotInfo";
 import { Student } from "@/lib/types/Student";
+import DoneIcon from "@mui/icons-material/Done";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 export const Slot: React.FC<{
   id: string;
@@ -96,6 +99,21 @@ export const Slot: React.FC<{
     setOpenModal(false);
   };
 
+  if (status === "complete") {
+    return (
+      <Button
+        key={id}
+        disabled={past}
+        variant="outlined"
+        color="secondary"
+        startIcon={<DoneIcon />}
+        sx={{ px: 0 }}
+      >
+        {dayjs.unix(Number(startDate)).format("hh:mm A")}
+      </Button>
+    );
+  }
+
   if (status === "reserved") {
     return (
       <>
@@ -103,6 +121,8 @@ export const Slot: React.FC<{
           key={id}
           variant="outlined"
           onClick={handleOpen}
+          sx={{ px: 0 }}
+          startIcon={<PendingActionsIcon />}
           color="success"
           {...(past && { color: "warning" })}
         >
@@ -180,7 +200,13 @@ export const Slot: React.FC<{
   }
 
   return (
-    <Button key={id} disabled={past} variant="outlined">
+    <Button
+      key={id}
+      disabled={past}
+      variant="outlined"
+      sx={{ px: 0 }}
+      startIcon={<EventAvailableIcon />}
+    >
       {dayjs.unix(Number(startDate)).format("hh:mm A")}
     </Button>
   );
