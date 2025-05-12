@@ -9,6 +9,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  InputLabel,
   Modal,
   Rating,
   TextField,
@@ -19,6 +20,7 @@ import { Student } from "@/lib/types/Student";
 import DoneIcon from "@mui/icons-material/Done";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { Feedback } from "@/lib/types/Feedback";
 
 export const Slot: React.FC<{
   id: string;
@@ -40,6 +42,13 @@ export const Slot: React.FC<{
   const [ratingHelperText, setRatingHelperText] = useState("");
 
   const [notes, setNotes] = useState("");
+  const [feedback, setFeedback] = useState<Feedback>({
+    satisfaction_rating: 0,
+    notes: "",
+  });
+
+  const date = dayjs.unix(startDate);
+  const past = date.isBefore(dayjs());
 
   const handleOpen = async () => {
     const res = await fetch(`/api/users/${studentId}`, { method: "GET" });
@@ -52,8 +61,20 @@ export const Slot: React.FC<{
 
   const handleClose = () => setOpenModal(false);
 
-  const date = dayjs.unix(startDate);
-  const past = date.isBefore(dayjs());
+  const handleOpenCompleteSlot = async () => {
+    const les = await fetch(`/api/lessons?slot_id=${id}`);
+    const [lesson] = await les.json();
+
+    const stud = await fetch(`/api/users/${studentId}`);
+    const student = await stud.json();
+
+    const res = await fetch(`/api/feedback?lesson_id=${lesson.id}`);
+    const [feedback] = await res.json();
+
+    setStudent(student);
+    setFeedback(feedback);
+    setOpenModal(true);
+  };
 
   const handleRatingChange = (
     _event: React.SyntheticEvent,
@@ -84,7 +105,7 @@ export const Slot: React.FC<{
       coach_id: coachId,
       lesson_id: lesson.id,
       satisfaction_rating: rating,
-      notes,
+      notes: notes || "",
     });
 
     await fetch(`/api/feedback`, {
@@ -101,16 +122,82 @@ export const Slot: React.FC<{
 
   if (status === "complete") {
     return (
-      <Button
-        key={id}
-        disabled={past}
-        variant="outlined"
-        color="secondary"
-        startIcon={<DoneIcon />}
-        sx={{ px: 0 }}
-      >
-        {dayjs.unix(Number(startDate)).format("hh:mm A")}
-      </Button>
+      <>
+        <Button
+          key={id}
+          disabled={past}
+          variant="outlined"
+          color="secondary"
+          startIcon={<DoneIcon />}
+          sx={{ px: 0 }}
+          onClick={handleOpenCompleteSlot}
+        >
+          {dayjs.unix(Number(startDate)).format("hh:mm A")}
+        </Button>
+        <Modal
+          open={openModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <SlotInfo
+              title="Lesson"
+              date={date}
+              studentName={student.name}
+              phoneNumber={student.phone_number}
+            />
+            <Divider sx={{ my: 2 }} />
+            <Typography
+              id="modal-modal-feedback-title"
+              variant="h6"
+              component="h2"
+              sx={{ mb: 1 }}
+            >
+              Feedback
+            </Typography>
+            <Box>
+              <Box sx={{ mb: 1 }}>
+                <InputLabel htmlFor="rating" sx={{ fontSize: "small", mb: 1 }}>
+                  Rating
+                </InputLabel>
+                <Rating
+                  name="rating"
+                  id="rating"
+                  value={feedback.satisfaction_rating}
+                  onChange={handleRatingChange}
+                />
+                <FormHelperText sx={{ mx: 0 }}>
+                  {ratingHelperText}
+                </FormHelperText>
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                <TextField
+                  name="notes"
+                  id="notes"
+                  label="Notes"
+                  value={feedback.notes || ""}
+                  multiline
+                  disabled
+                  rows={4}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </Modal>
+      </>
     );
   }
 
