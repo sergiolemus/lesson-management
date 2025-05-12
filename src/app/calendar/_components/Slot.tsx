@@ -77,9 +77,9 @@ export const Slot: React.FC<{
         <Button
           key={id}
           variant="outlined"
-          color="success"
-          disabled={past}
           onClick={handleOpen}
+          color="success"
+          {...(past && { color: "warning" })}
         >
           {dayjs.unix(Number(startDate)).format("hh:mm A")}
         </Button>
