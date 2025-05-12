@@ -1,7 +1,7 @@
 import { getSession } from "@/auth";
 import { db } from "@/db";
 import { slots } from "@/db/schema/slots";
-import { and, eq, gt, gte, lt, or } from "drizzle-orm";
+import { and, eq, gt, lt, or } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
