@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { Alert, Box, Button, Modal, Snackbar, Typography } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 import { Coach } from "@/lib/types/Coach";
 import { SlotInfo } from "./SlotInfo";
 

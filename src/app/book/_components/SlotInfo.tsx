@@ -1,6 +1,6 @@
 import React from "react";
 import { Dayjs } from "dayjs";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { formatPhoneNumber } from "@/lib/phone/format";
 
 export const SlotInfo: React.FC<{
