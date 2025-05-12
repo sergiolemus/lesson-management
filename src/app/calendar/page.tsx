@@ -39,6 +39,7 @@ export default function Calendar() {
   const [userId, setUserId] = useState(getUser());
   const [submittedFeedbackSlotId, setSubmittedFeedbackSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [snackBarMessage, setSnackBarMessage] = useState("");
   const [openErrorSnackBar, setOpenErrorSnackBar] = useState(false);
   const [userName, setUserName] = useState("");
 
@@ -71,6 +72,7 @@ export default function Calendar() {
 
   const handleFeedbackSubmit = (id: string) => () => {
     setSubmittedFeedbackSlotId(id);
+    setSnackBarMessage("Feedback Submitted!");
     setOpenSnackBar(true);
   };
 
@@ -110,6 +112,8 @@ export default function Calendar() {
     const { id }: TSlot = await res.json();
 
     setAddedSlot(id);
+    setSnackBarMessage("Slot Created!");
+    setOpenSnackBar(true);
     handleClose();
   };
 
@@ -384,7 +388,7 @@ export default function Calendar() {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Feedback Submitted!
+          {snackBarMessage}
         </Alert>
       </Snackbar>
       <Snackbar
