@@ -13,11 +13,9 @@ export const Slot: React.FC<{
   onReserve: () => void;
 }> = ({ id, startDate, booked, coach, onReserve }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
 
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
-  const handleCloseSnackBar = () => setOpenSnackBar(false);
 
   const date = dayjs.unix(startDate);
   const past = date.isBefore(dayjs());
@@ -48,7 +46,6 @@ export const Slot: React.FC<{
     });
 
     setOpenModal(false);
-    setOpenSnackBar(true);
     onReserve();
   };
 
@@ -119,20 +116,6 @@ export const Slot: React.FC<{
           </Box>
         </Box>
       </Modal>
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackBar}
-      >
-        <Alert
-          onClose={handleCloseSnackBar}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Lesson Booked!
-        </Alert>
-      </Snackbar>
     </>
   );
 };

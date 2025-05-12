@@ -14,6 +14,8 @@ import {
   Select,
   InputLabel,
   Popover,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { getWeek } from "@/lib";
@@ -30,6 +32,7 @@ export default function Book() {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [bookedSlotId, setBookedSlotId] = useState("");
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -46,6 +49,13 @@ export default function Book() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCloseSnackBar = () => setOpenSnackBar(false);
+
+  const handleReserve = (id: string) => () => {
+    setBookedSlotId(id);
+    setOpenSnackBar(true);
   };
 
   useEffect(() => {
@@ -252,7 +262,7 @@ export default function Book() {
                             startDate={start_date}
                             booked={booked}
                             coach={coaches[coachId]}
-                            onReserve={() => setBookedSlotId(id)}
+                            onReserve={handleReserve(id)}
                           />
                         ))}
                       </Box>
@@ -264,6 +274,20 @@ export default function Book() {
           </CardContent>
         </Card>
       </Box>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackBar}
+      >
+        <Alert
+          onClose={handleCloseSnackBar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Lesson Booked!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
