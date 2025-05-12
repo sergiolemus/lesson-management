@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) + [Drizzle ORM](https://orm.drizzle.team/) + [Turso](https://turso.tech/) + [MUI](https://mui.com/) project.
+This is a [Next.js](https://nextjs.org) + [Typescript](https://www.typescriptlang.org/) [Drizzle ORM](https://orm.drizzle.team/) + [Turso](https://turso.tech/) + [MUI](https://mui.com/) project.
 
 ## Getting Started
 
@@ -31,6 +31,11 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+To learn more about Typescript, take a look at the following resources:
+
+- [Typescript Documentation](https://www.typescriptlang.org/docs/handbook/intro.html) - learn about Typescript features and API.
+- [Typescript Playground](https://www.typescriptlang.org/play/) - an interactive IDE for Typescript learning.
 
 To learn more about Drizzle ORM, take a look at the following resources:
 
@@ -82,4 +87,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 26 34 AM" src="https://github.com/user-attachments/assets/3f0bb4d0-82a2-472b-990d-de8538c653f5" />
 
-<img width="1728" alt="Screenshot 2025-05-12 at 6 26 39 AM" src="https://github.com/user-attachments/assets/87441d46-ed09-4b52-bfcf-fd0f9af23727" />
+<img width="1728" alt="Screenshot 2025-05-12 at 6 28 18 AM" src="https://github.com/user-attachments/assets/94c409c4-74ed-4828-a79d-94e43e8da709" />
