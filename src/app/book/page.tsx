@@ -244,7 +244,7 @@ export default function Book() {
                     onClick={(event) => setAnchorEl(event.currentTarget)}
                     startIcon={<EditCalendarIcon />}
                   >
-                    Week
+                    Date
                   </Button>
                 </Box>
                 <Popover
