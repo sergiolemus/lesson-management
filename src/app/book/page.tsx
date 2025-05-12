@@ -27,6 +27,7 @@ import { Slot } from "./_components/Slot";
 import { Coach } from "@/lib/types/Coach";
 import { getUser } from "@/auth/getUser";
 import { useRouter } from "next/navigation";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Book() {
   const [coaches, setCoaches] = useState<{ [key: string]: Coach }>({});
@@ -35,6 +36,7 @@ export default function Book() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [bookedSlotId, setBookedSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const router = useRouter();
 
@@ -51,6 +53,10 @@ export default function Book() {
     6: [],
   });
 
+  const handleLogout = () => {
+    router.push("/");
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -63,9 +69,16 @@ export default function Book() {
   };
 
   useEffect(() => {
-    const { role } = getUser();
+    const { role, userId } = getUser();
     if (role === "coach") router.push("/");
-  });
+
+    (async () => {
+      const res = await fetch(`/api/users/${userId}`);
+      const user = await res.json();
+
+      setUserName(user.name);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -135,10 +148,45 @@ export default function Book() {
                 mb: 2,
               }}
             >
-              <Box sx={{ mb: 2 }}>
-                <Typography component="h2" variant="h5">
-                  Book Coach
-                </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  mb: 2,
+                  gap: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    flexGrow: 6,
+                  }}
+                >
+                  <Typography component="h2" variant="h5">
+                    {userName}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    width: "14.25%",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    fullWidth
+                    onClick={handleLogout}
+                    startIcon={<LogoutIcon />}
+                  >
+                    Logout
+                  </Button>
+                </Box>
               </Box>
               <Box
                 sx={{
@@ -148,8 +196,8 @@ export default function Book() {
                   gap: 2,
                 }}
               >
-                <FormControl sx={{ flexGrow: 1 }}>
-                  <InputLabel htmlFor="coach-id">Coach</InputLabel>
+                <FormControl sx={{ flexGrow: 2 }}>
+                  <InputLabel htmlFor="coach-id">Select Coach</InputLabel>
                   <Select
                     id="coach-id"
                     name="coach-id"
@@ -166,13 +214,23 @@ export default function Book() {
                     ))}
                   </Select>
                 </FormControl>
-                <Button
-                  variant="contained"
-                  onClick={(event) => setAnchorEl(event.currentTarget)}
-                  startIcon={<EditCalendarIcon />}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    width: "14.25%",
+                  }}
                 >
-                  Date
-                </Button>
+                  <Button
+                    variant="contained"
+                    sx={{ height: "100%" }}
+                    onClick={(event) => setAnchorEl(event.currentTarget)}
+                    startIcon={<EditCalendarIcon />}
+                  >
+                    Week
+                  </Button>
+                </Box>
                 <Popover
                   id={id}
                   open={open}
