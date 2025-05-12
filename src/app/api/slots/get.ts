@@ -1,9 +1,11 @@
+import { getSession } from "@/auth";
 import { db } from "@/db";
 import { slots } from "@/db/schema/slots";
-import { and, eq, gte, lte, SQL } from "drizzle-orm";
+import { and, eq, gte, isNull, lte, or, SQL } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export const GET = async (request: NextRequest) => {
+  const { userId, role } = await getSession();
   const { searchParams } = request.nextUrl;
 
   const start_date = searchParams.get("start_date");
@@ -12,6 +14,13 @@ export const GET = async (request: NextRequest) => {
   const booked = searchParams.get("booked");
 
   const filters: SQL[] = [];
+
+  if (role === "student") {
+    filters.push(
+      //@ts-expect-error
+      or(eq(slots.student_id, String(userId)), isNull(slots.student_id))
+    );
+  }
 
   if (coach_id) {
     filters.push(eq(slots.coach_id, String(coach_id)));
