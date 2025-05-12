@@ -8,6 +8,7 @@ export const slots = sqliteTable("slot", {
   coach_id: text("coach_id")
     .references(() => users.id)
     .notNull(),
+  student_id: text("student_id").references(() => users.id),
   start_date: int("start_date").notNull(),
   end_date: int("end_date").notNull(),
   booked: int("booked").default(0),
