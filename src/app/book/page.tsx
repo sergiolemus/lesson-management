@@ -255,12 +255,12 @@ export default function Book() {
                           mx: 1,
                         }}
                       >
-                        {slots.map(({ id, start_date, booked }) => (
+                        {slots.map(({ id, start_date, status }) => (
                           <Slot
                             id={id}
                             key={id}
                             startDate={start_date}
-                            booked={booked}
+                            status={status}
                             coach={coaches[coachId]}
                             onReserve={handleReserve(id)}
                           />

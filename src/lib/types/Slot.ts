@@ -4,4 +4,5 @@ export type Slot = {
   id: string;
   coach_id: string;
   student_id: string;
+  status: string;
 };

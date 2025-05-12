@@ -20,11 +20,11 @@ import { Student } from "@/lib/types/Student";
 export const Slot: React.FC<{
   id: string;
   startDate: number;
-  booked: number;
+  status: string;
   coachId: string;
   studentId: string;
   onReserve?: () => void;
-}> = ({ id, startDate, booked, studentId }) => {
+}> = ({ id, startDate, status, studentId }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const [student, setStudent] = useState<Student>({
@@ -71,7 +71,7 @@ export const Slot: React.FC<{
     setOpenModal(false);
   };
 
-  if (booked) {
+  if (status === "reserved") {
     return (
       <>
         <Button

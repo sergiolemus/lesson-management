@@ -9,10 +9,10 @@ import { SlotInfo } from "./SlotInfo";
 export const Slot: React.FC<{
   id: string;
   startDate: number;
-  booked: number;
+  status: string;
   coach: Coach;
   onReserve: () => void;
-}> = ({ id, startDate, booked, coach, onReserve }) => {
+}> = ({ id, startDate, status, coach, onReserve }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpen = () => setOpenModal(true);
@@ -21,7 +21,7 @@ export const Slot: React.FC<{
   const date = dayjs.unix(startDate);
   const past = date.isBefore(dayjs());
 
-  if (booked) {
+  if (status === "reserved") {
     return (
       <>
         <Button

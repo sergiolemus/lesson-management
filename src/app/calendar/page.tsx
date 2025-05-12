@@ -252,7 +252,7 @@ export default function Calendar() {
                           ({
                             id,
                             start_date,
-                            booked,
+                            status,
                             coach_id,
                             student_id,
                           }) => (
@@ -260,7 +260,7 @@ export default function Calendar() {
                               id={id}
                               key={id}
                               startDate={start_date}
-                              booked={booked}
+                              status={status}
                               coachId={coach_id}
                               studentId={student_id}
                             />
