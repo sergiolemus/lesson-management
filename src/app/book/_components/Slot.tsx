@@ -10,7 +10,8 @@ export const Slot: React.FC<{
   startDate: number;
   booked: number;
   coach: Coach;
-}> = ({ id, startDate, booked, coach }) => {
+  onReserve: () => void;
+}> = ({ id, startDate, booked, coach, onReserve }) => {
   const [openModal, setOpenModal] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
 
@@ -48,6 +49,7 @@ export const Slot: React.FC<{
 
     setOpenModal(false);
     setOpenSnackBar(true);
+    onReserve();
   };
 
   return (

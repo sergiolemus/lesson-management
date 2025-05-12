@@ -29,6 +29,7 @@ export default function Book() {
   const [coachId, setCoachId] = useState("");
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [bookedSlotId, setBookedSlotId] = useState("");
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -92,7 +93,7 @@ export default function Book() {
 
       setSchedule(scheduleWithSlots);
     })();
-  }, [currentDate, coachId]);
+  }, [currentDate, coachId, bookedSlotId]);
 
   return (
     <Container maxWidth="lg">
@@ -251,6 +252,7 @@ export default function Book() {
                             startDate={start_date}
                             booked={booked}
                             coach={coaches[coachId]}
+                            onReserve={() => setBookedSlotId(id)}
                           />
                         ))}
                       </Box>
