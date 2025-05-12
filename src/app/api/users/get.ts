@@ -18,6 +18,7 @@ export const GET = async (request: NextRequest) => {
       name: users.name,
       id: users.id,
       role: users.role,
+      phone_number: users.phone_number,
     })
     .from(users)
     .where(and(...filters));
