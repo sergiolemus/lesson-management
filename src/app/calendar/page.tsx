@@ -26,6 +26,7 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Slot } from "./_components/Slot";
+import { useRouter } from "next/navigation";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -35,6 +36,8 @@ export default function Calendar() {
   const [userId, setUserId] = useState(getUser());
   const [submittedFeedbackSlotId, setSubmittedFeedbackSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const router = useRouter();
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -88,6 +91,11 @@ export default function Calendar() {
 
     setAddedSlot(id);
   };
+
+  useEffect(() => {
+    const { role } = getUser();
+    if (role === "student") router.push("/");
+  });
 
   useEffect(() => {
     (async () => {

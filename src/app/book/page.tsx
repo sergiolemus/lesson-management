@@ -25,6 +25,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import { Slot } from "./_components/Slot";
 import { Coach } from "@/lib/types/Coach";
+import { getUser } from "@/auth/getUser";
+import { useRouter } from "next/navigation";
 
 export default function Book() {
   const [coaches, setCoaches] = useState<{ [key: string]: Coach }>({});
@@ -33,6 +35,8 @@ export default function Book() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [bookedSlotId, setBookedSlotId] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const router = useRouter();
 
   const open = Boolean(anchorEl);
   const id = open ? "date-popover" : undefined;
@@ -57,6 +61,11 @@ export default function Book() {
     setBookedSlotId(id);
     setOpenSnackBar(true);
   };
+
+  useEffect(() => {
+    const { role } = getUser();
+    if (role === "coach") router.push("/");
+  });
 
   useEffect(() => {
     (async () => {
