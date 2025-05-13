@@ -176,6 +176,7 @@ export const Slot: React.FC<{
                 <Rating
                   name="rating"
                   id="rating"
+                  disabled
                   value={feedback.satisfaction_rating}
                   onChange={handleRatingChange}
                 />
