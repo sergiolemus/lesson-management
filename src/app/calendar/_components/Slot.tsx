@@ -126,7 +126,6 @@ export const Slot: React.FC<{
       <>
         <Button
           key={id}
-          disabled={past}
           variant="outlined"
           color="secondary"
           startIcon={<DoneIcon />}
