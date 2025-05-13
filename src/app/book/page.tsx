@@ -218,7 +218,7 @@ export default function Book() {
                     id="coach-id"
                     name="coach-id"
                     value={coachId}
-                    label="Coach"
+                    label="Select Coach"
                     onChange={(event) => {
                       setCoachId(event.target.value as string);
                     }}
