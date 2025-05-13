@@ -61,8 +61,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Screenshots
 
-<img width="1728" alt="Screenshot 2025-05-12 at 6 18 04 AM" src="https://github.com/user-attachments/assets/eb3cbc30-5e1b-4c2d-ab59-ccae933e6472" />
-
 <img width="1728" alt="Screenshot 2025-05-12 at 6 18 14 AM" src="https://github.com/user-attachments/assets/a665d56d-4610-448e-a379-8f6e15e84db7" />
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 18 30 AM" src="https://github.com/user-attachments/assets/095d1357-ea57-417b-a5a9-155dcb219bde" />
@@ -74,6 +72,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 <img width="1728" alt="Screenshot 2025-05-12 at 6 19 01 AM" src="https://github.com/user-attachments/assets/f52f2901-5959-4b26-aef5-55bf85e86edf" />
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 20 08 AM" src="https://github.com/user-attachments/assets/531a4c7e-1665-46ae-8bac-80c7c95ef80e" />
+
+<img width="1728" alt="Screenshot 2025-05-12 at 6 18 04 AM" src="https://github.com/user-attachments/assets/eb3cbc30-5e1b-4c2d-ab59-ccae933e6472" />
 
 <img width="1728" alt="Screenshot 2025-05-12 at 6 20 28 AM" src="https://github.com/user-attachments/assets/4f47f4b2-48cb-4003-8b64-3cddf9abfee5" />
 
