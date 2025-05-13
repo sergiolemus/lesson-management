@@ -30,6 +30,7 @@ import { Slot } from "./_components/Slot";
 import { useRouter } from "next/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FaceIcon from "@mui/icons-material/Face";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(dayjs().minute(0));
@@ -246,7 +247,7 @@ export default function Calendar() {
                   onClick={(event) => setAnchorEl(event.currentTarget)}
                   startIcon={<EditCalendarIcon />}
                 >
-                  Create Slot
+                  Date
                 </Button>
               </Box>
               <Popover
@@ -293,8 +294,13 @@ export default function Calendar() {
                         }
                       />
                     </FormControl>
-                    <Button type="submit" variant="contained" sx={{ m: 2 }}>
-                      Create
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ m: 2 }}
+                      startIcon={<InsertInvitationIcon />}
+                    >
+                      Add Slot
                     </Button>
                   </Box>
                 </LocalizationProvider>
