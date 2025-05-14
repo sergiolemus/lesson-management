@@ -11,7 +11,14 @@ TURSO_DATABASE_URL=
 TURSO_AUTH_TOKEN=
 ```
 
-Second, run the development server:
+Second, create database tables:
+
+```bash
+pnpm add -D drizzle-kit tsx
+npx drizzle-kit push
+```
+
+Third, run the development server:
 
 ```bash
 pnpm install
