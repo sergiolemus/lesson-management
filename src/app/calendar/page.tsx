@@ -279,6 +279,8 @@ export default function Calendar() {
                       <DateCalendar
                         sx={{ height: "290px", mb: 1 }}
                         value={currentDate}
+                        minDate={dayjs("2025-05-01")}
+                        maxDate={dayjs("2025-05-31")}
                         onChange={(newValue) =>
                           setCurrentDate(dayjs(newValue).second(0))
                         }
