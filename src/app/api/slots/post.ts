@@ -13,6 +13,14 @@ export const POST = async (request: NextRequest) => {
 
   const { start_date, end_date, coach_id: _coach_id } = await request.json();
 
+  if (start_date < 1746072000) {
+    return Response.json({}, { status: 403 });
+  }
+
+  if (end_date > 1748750400) {
+    return Response.json({}, { status: 403 });
+  }
+
   const check = await db
     .select()
     .from(slots)
